@@ -30,9 +30,9 @@
    - Hợp lệ:
      - Có 1 môn có điểm = 0 -> Rớt
      - Tạo biến và gán giá trị:
-       - Tổng điểm 3 môn thi: `total = monA + monB + monC`
-       - Tổng điểm ưu tiên: `grade_uutien = grade_khuvuc + grade_doituong`
-       - Điểm tổng: `result = total + grade_uutien`;
+       - Tổng điểm 3 môn thi.
+       - Tổng điểm ưu tiên = Điểm khu vực + Điểm ưu tiên thí sinh
+       - Điểm tổng = Điểm 3 môn + Tổng điểm ưu tiên.
      - So sánh điểm tổng và điểm chuẩn:
        - điểm tổng >= điểm chuẩn: Đậu
        - điểm tổng < điểm chuẩn: Rớt
@@ -55,10 +55,10 @@
 
 1. Tạo biến và cho người dùng nhập:
    1. Tên người sử dụng: `userName`
-   2. Số điện tiêu thụ: `energin` (KW)
+   2. Số điện tiêu thụ: `countKw` (KW)
 2. Kiểm tra số nhập vào có hợp lệ:
    1. `userName`: không bỏ trống
-   2. `energin`: không bỏ trống; là số dương
+   2. `countKw`: không bỏ trống; là số dương
    - Không hợp lệ: In lỗi ra UI
    - Hợp lệ:
      - In tên của người dùng và tổng số tiền điện phải trả.

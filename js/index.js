@@ -137,14 +137,14 @@ function printOutput(id, content) {
 
 // BT 01 - Quản lý tuyển sinh
 function printResult() {
-  const KHU_VUC = {
+  const AREAS = {
     "A": 2,
     "B": 1,
     "C": 0.5,
     "X": 0,
   };
 
-  const DOI_TUONG = {
+  const STUDENT_CATEGORY = {
     1: 2.5,
     2: 1.5,
     3: 1,
@@ -153,17 +153,17 @@ function printResult() {
 
   let baseGrade = document.getElementById('baseGrade').value;
   let area = document.getElementById('areas').value;
-  let objectStudent = document.getElementById('objectStudent').value;
+  let studentCategory = document.getElementById('objectStudent').value;
   let grades = document.getElementsByName('grades');
   let output;
 
-  let checkBase = validateNumber(baseGrade, 'Điểm chuẩn', 'Float');
-  let checkArea = validateEmpty(area, 'Khu vực');
-  let checkObjectStudent = validateEmpty(objectStudent, 'Đối tượng dự thi');
+  let baseGradeValidation = validateNumber(baseGrade, 'Điểm chuẩn', 'Float');
+  let areaValidation = validateEmpty(area, 'Khu vực');
+  let studentCategoryValidation = validateEmpty(studentCategory, 'Đối tượng dự thi');
 
-  if (!checkBase.status) output = checkBase.mess;
-  else if (!checkArea.status) output = checkArea.mess;
-  else if (!checkObjectStudent.status) output = checkObjectStudent.mess;
+  if (!baseGradeValidation.status) output = baseGradeValidation.mess;
+  else if (!areaValidation.status) output = areaValidation.mess;
+  else if (!studentCategoryValidation.status) output = studentCategoryValidation.mess;
   else {
     let lstGrade = [...grades];
     for (let i = 0; i < lstGrade.length; i++) {
@@ -184,8 +184,8 @@ function printResult() {
       if (grade.value * 1 <= 0) isFail = true;
     });
 
-    let areaGrade = KHU_VUC[area];
-    let objectGrade = DOI_TUONG[objectStudent];
+    let areaGrade = AREAS[area];
+    let objectGrade = STUDENT_CATEGORY[studentCategory];
     let totalGrade = areaGrade + objectGrade + totalThree;
 
     output = (isFail || totalGrade < baseGrade)
@@ -413,4 +413,3 @@ function calculatorCable() {
 
   printOutput('result_exercise_04', output);
 }
-
