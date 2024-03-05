@@ -117,11 +117,10 @@ function handleChangeExercise(exerciseId) {
 }
 
 // Format currency VND
-function convertCurrencyVnd(number) {
-  const LOCALE = 'vi-VN';
+function convertCurrencyVnd(number, LOCALE = 'vi-VN', currency = 'VND') {
   const OPTIONS = {
     style: 'currency',
-    currency: 'VND',
+    currency,
   };
   return new Intl.NumberFormat(LOCALE, OPTIONS).format(number);
 }
@@ -137,14 +136,14 @@ function printOutput(id, content) {
 
 // BT 01 - Quản lý tuyển sinh
 function printResult() {
-  const AREAS = {
+  const KHU_VUC = {
     "A": 2,
     "B": 1,
     "C": 0.5,
     "X": 0,
   };
 
-  const STUDENT_CATEGORY = {
+  const DOI_TUONG = {
     1: 2.5,
     2: 1.5,
     3: 1,
@@ -153,17 +152,18 @@ function printResult() {
 
   let baseGrade = document.getElementById('baseGrade').value;
   let area = document.getElementById('areas').value;
-  let studentCategory = document.getElementById('objectStudent').value;
+  let objectStudent = document.getElementById('objectStudent').value;
   let grades = document.getElementsByName('grades');
   let output;
 
-  let baseGradeValidation = validateNumber(baseGrade, 'Điểm chuẩn', 'Float');
-  let areaValidation = validateEmpty(area, 'Khu vực');
-  let studentCategoryValidation = validateEmpty(studentCategory, 'Đối tượng dự thi');
+  let checkBase = validateNumber(baseGrade, 'Điểm chuẩn', 'Float');
+  let checkArea = validateEmpty(area, 'Khu vực');
+  let checkObjectStudent = validateEmpty(objectStudent, 'Đối tượng dự thi');
 
-  if (!baseGradeValidation.status) output = baseGradeValidation.mess;
-  else if (!areaValidation.status) output = areaValidation.mess;
-  else if (!studentCategoryValidation.status) output = studentCategoryValidation.mess;
+  if (!checkBase.status) output = checkBase.mess;
+  else if (baseGrade < 0) output = 'Điểm chuẩn phải là số dương';
+  else if (!checkArea.status) output = checkArea.mess;
+  else if (!checkObjectStudent.status) output = checkObjectStudent.mess;
   else {
     let lstGrade = [...grades];
     for (let i = 0; i < lstGrade.length; i++) {
@@ -177,20 +177,21 @@ function printResult() {
   }
 
   if (output === undefined) {
-    let totalThree = 0;
+    let total = 0;
     let isFail = false;
     [...grades].forEach((grade) => {
-      totalThree += grade.value * 1;
+      total += grade.value * 1;
       if (grade.value * 1 <= 0) isFail = true;
     });
 
-    let areaGrade = AREAS[area];
-    let objectGrade = STUDENT_CATEGORY[studentCategory];
-    let totalGrade = areaGrade + objectGrade + totalThree;
+    let grade_area = KHU_VUC[area];
+    let grade_object = DOI_TUONG[objectStudent];
+    let grade_priority = grade_area + grade_object;
+    let result = grade_priority + total;
 
-    output = (isFail || totalGrade < baseGrade)
-      ? `Tổng điểm: ${totalGrade} - Kết quả: Rớt`
-      : `👉Tổng điểm: ${totalGrade} - Kết quả: Đậu`;
+    output = (isFail || result < baseGrade)
+      ? `Tổng điểm: ${result} - Kết quả: Rớt`
+      : `👉Tổng điểm: ${result} - Kết quả: Đậu`;
   }
 
   printOutput('result_exercise_01', output);
@@ -222,21 +223,19 @@ function calElectricityBill() {
   }
 
   let userName = document.getElementById('userName').value;
-  let countKw = document.getElementById('countKw').value;
+  let energy = document.getElementById('energy').value;
 
   let output;
 
   let checkUserName = validateEmpty(userName, 'Tên người sử dụng');
-  let checkCountKw = validateNumber(countKw, 'Số KW', 'Float');
+  let checkenergy = validateNumber(energy, 'Số KW', 'Float');
   if (!checkUserName.status) output = checkUserName.mess;
-  else if (!checkCountKw.status) output = checkCountKw.mess;
-  else if (countKw * 1 < 0) output = `Số KW không hợp lệ.`
-
-
+  else if (!checkenergy.status) output = checkenergy.mess;
+  else if (energy * 1 < 0) output = `Số KW không hợp lệ.`
   if (output === undefined) {
     let step = 1;
     let price = 0;
-    let kw = countKw
+    let kw = energy
     while (kw !== 0) {
       let levelCurrent = LEVEL[step];
 
@@ -250,7 +249,7 @@ function calElectricityBill() {
         kw = 0;
       }
     };
-    output = `👉 Người sử dụng: ${userName} sử dụng ${countKw} KW - Phí: ${price}`;
+    output = `👉 Người sử dụng: ${userName} sử dụng ${energy} KW - Phí: ${convertCurrencyVnd(price)}`;
   }
 
   printOutput('result_exercise_02', output);
@@ -309,27 +308,26 @@ function calTaxBill() {
   else if (!checkDependant.status) output = checkDependant.mess;
   else if (dependant * 1 < 0) output = `Số người phụ thuộc không được là số âm`;
 
-
   if (output === undefined) {
-    let prevCost = income * 1 - PRICE_TAX - dependant * 1 * MONEY_OF_DEPENDANT;
-    let cost = 0;
+    let taxable_income = income * 1 - PRICE_TAX - dependant * 1 * MONEY_OF_DEPENDANT;
+    let cash = 0;
 
     let step = 1;
-    while (prevCost !== 0) {
+    while (taxable_income !== 0) {
       let range = TAX_LEVEL[step].range * 1_000_000;
-      let percent = TAX_LEVEL[step].percent;
-      if (prevCost >= range) {
-        cost += range * percent;
-        prevCost = prevCost - range;
+      let tax_rate = TAX_LEVEL[step].percent;
+      if (taxable_income >= range) {
+        cash += range * tax_rate;
+        taxable_income = taxable_income - range;
       }
       else {
-        cost += prevCost * percent;
-        prevCost = 0;
+        cash += taxable_income * tax_rate;
+        taxable_income = 0;
       }
       step++;
     }
 
-    output = `👉 ${taxpayers} thu nhập ${convertCurrencyVnd(income)}/năm - Tiền thuế thu nhập cá nhân: ${convertCurrencyVnd(cost)}`;
+    output = `👉 ${taxpayers} thu nhập ${convertCurrencyVnd(income)}/năm - Tiền thuế thu nhập cá nhân: ${convertCurrencyVnd(cash)}`;
   }
 
   printOutput('result_exercise_03', output);
@@ -392,7 +390,9 @@ function calculatorCable() {
   if (!checkCodeCustomer.status) output = checkCodeCustomer.mess;
   else if (!checkTypeCustomer.status) output = checkTypeCustomer.mess;
   else if (!checkChannels.status) output = checkChannels.mess;
+  else if (channels < 0) output = `Số kết nối không được âm`
   else if (typeCustomer === 'Doanh nghiệp' && !checkConnects.status) output = checkConnects.mess;
+  else if (typeCustomer === 'Doanh nghiệp' && connects < 0) output = `Số kênh không được âm`;
 
   const PRICE = TYPE_CUSTOMER[typeCustomer];
 
@@ -406,7 +406,7 @@ function calculatorCable() {
     }
     else priceConnect = PRICE.costStandard.basic
 
-    let totalPrice = convertCurrencyVnd(priceBase + priceChannel + priceConnect);
+    let totalPrice = convertCurrencyVnd(priceBase + priceChannel + priceConnect, 'de-DE', currency = 'USD');
 
     output = `👉 Mã khách hàng: ${codeCustomer} - Tổng chi phí: ${totalPrice}`;
   }

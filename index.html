@@ -97,13 +97,28 @@
                   </ul>
                 </li>
               </ul>
+              <details class="mb-2">
+                <summary>Ví dụ:</summary>
+                <ul>
+                  <li>
+                    Input: Điểm chuẩn = 26; Khu vực = B; Đối tượng = 2; Điểm thi
+                    3 môn = 10, 6, 10
+                    <br />
+                    Output: Tổng điểm: 28.5 - Kết quả: Đậu
+                  </li>
+                  <li>
+                    Input: Điểm chuẩn = 20; Khu vực = A; Đối tượng = 3; Điểm thi
+                    3 môn = 10, 0, 10
+                    <br />
+                    Output: Tổng điểm: 23 - Kết quả: Rớt
+                  </li>
+                </ul>
+              </details>
               <p class="mb-2">Validate input</p>
               <ul>
                 <li>Các trường không bỏ trống</li>
-                <li>
-                  Điểm chuẩn và điểm 3 môn dự thi là chữ số; nằm trong khoảng
-                  [0; 10]
-                </li>
+                <li>Điểm chuẩn và điểm 3 môn dự thi là số dương</li>
+                <li>Điểm 3 môn dự thi nằm trong khoảng [0; 10]</li>
               </ul>
             </div>
             <!-- Form -->
@@ -259,6 +274,26 @@
                   </div>
                 </div>
               </div>
+              <details class="mb-2">
+                <summary>Ví dụ:</summary>
+                <ul>
+                  <li>
+                    Input: User = ABC; Số KW = -120
+                    <br />
+                    Output: Số KW không hợp lệ.
+                  </li>
+                  <li>
+                    Input: User = ABC; Số KW = 120
+                    <br />
+                    Output: Người sử dụng: ABC sử dụng 120 KW - Phí: 74.500 ₫
+                  </li>
+                  <li>
+                    Input: User = ABC; Số KW = 260
+                    <br />
+                    Output: Người sử dụng: ABC sử dụng 260 KW - Phí: 208.500 ₫
+                  </li>
+                </ul>
+              </details>
             </div>
             <!-- Form -->
             <div class="container">
@@ -279,8 +314,8 @@
                     <input
                       class="w-100 px-2 py-1"
                       type="text"
-                      name="countKw"
-                      id="countKw"
+                      name="energy"
+                      id="energy"
                       placeholder="Nhập số KW tiêu thụ"
                     />
                   </div>
@@ -382,6 +417,38 @@
                   </div>
                 </div>
               </div>
+              <details class="mb-2">
+                <summary>Ví dụ:</summary>
+                <ul>
+                  <li>
+                    Input: Họ tên: Nguyễn Văn A; Tổng thu nhập năm: 40.000.000;
+                    Số người phụ thuộc: 0;
+                    <br />
+                    Output: Nguyễn Văn A thu nhập 40.000.000 ₫/năm - Tiền thuế
+                    thu nhập cá nhân: 1.800.000 ₫
+                  </li>
+                  <li>
+                    Input: Họ tên: Nguyễn Văn A; Tổng thu nhập năm: 260000000;
+                    Số người phụ thuộc: 4;
+                    <br />
+                    Output: Nguyễn Văn A thu nhập 260.000.000 ₫/năm - Tiền thuế
+                    thu nhập cá nhân: 25.440.000 ₫
+                  </li>
+                  <li>
+                    Input: Họ tên: Nguyễn Văn A; Tổng thu nhập năm: 100000000;
+                    Số người phụ thuộc: 2;
+                    <br />
+                    Output: Nguyễn Văn A thu nhập 100.000.000 ₫/năm - Tiền thuế
+                    thu nhập cá nhân: 6.280.000 ₫
+                  </li>
+                  <li>
+                    Input: Họ tên: Nguyễn Văn A; Tổng thu nhập năm: -10000000;
+                    Số người phụ thuộc: 2;
+                    <br />
+                    Output: Thu nhập không được là số âm
+                  </li>
+                </ul>
+              </details>
             </div>
             <!-- Form -->
             <div class="container">
@@ -497,11 +564,52 @@
                     <p class="mb-2">Validate input</p>
                     <ul>
                       <li>Các trường không bỏ trống</li>
-                      <li>Số kênh cao cấp và SỐ kết nối là số nguyên dương</li>
+                      <li>Số kênh cao cấp và Số kết nối là số nguyên dương</li>
                     </ul>
                   </div>
                 </div>
               </div>
+              <details class="mb-2">
+                <summary>Ví dụ:</summary>
+                <ul>
+                  <li>
+                    Input: Mã khách hàng = ABC; Loại khách hàng = Nhà dân; Số
+                    kênh = 10;
+                    <br />
+                    Output: Mã khách hàng: ABC - Tổng chi phí: 100,00 $
+                  </li>
+                  <li>
+                    Input: Mã khách hàng = ABC; Loại khách hàng = Nhà dân; Số
+                    kênh = -10;
+                    <br />
+                    Output: Số kênh không được âm
+                  </li>
+                  <li>
+                    Input: Mã khách hàng = ABC; Loại khách hàng = Doanh nghiệp;
+                    Số kết nối = 10; Số kênh = 10;
+                    <br />
+                    Output: Mã khách hàng: ABC - Tổng chi phí: 590,00 $
+                  </li>
+                  <li>
+                    Input: Mã khách hàng = ABC; Loại khách hàng = Doanh nghiệp;
+                    Số kết nối = 10; Số kênh = 10;
+                    <br />
+                    Output: Mã khách hàng: ABC - Tổng chi phí: 590,00 $
+                  </li>
+                  <li>
+                    Input: Mã khách hàng = ABC; Loại khách hàng = Doanh nghiệp;
+                    Số kết nối = 10; Số kênh = 12;
+                    <br />
+                    Output: Mã khách hàng: ABC - Tổng chi phí: 600,00 $
+                  </li>
+                  <li>
+                    Input: Mã khách hàng = ABC; Loại khách hàng = Doanh nghiệp;
+                    Số kết nối = 10; Số kênh = -12;
+                    <br />
+                    Output: Số kênh không được âm
+                  </li>
+                </ul>
+              </details>
             </div>
             <!-- Form -->
             <div class="container">
@@ -595,7 +703,6 @@
       crossorigin="anonymous"
     ></script>
 
-    <!-- Main JS -->
     <script src="./js/index.js"></script>
   </body>
 </html>
